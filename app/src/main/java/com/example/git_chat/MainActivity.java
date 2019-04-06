@@ -3,16 +3,17 @@ package com.example.git_chat;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 public class MainActivity extends AppCompatActivity implements RequestsFragment.OnFragmentInteractionListener,
                                                             ChatsFragment.OnFragmentInteractionListerner,
@@ -85,10 +86,20 @@ public class MainActivity extends AppCompatActivity implements RequestsFragment.
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        if(item.getItemId() == R.id.main_logout_btn){
+        if(item.getItemId() == R.id.main_setting_btn){
+
+            Intent settings_intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(settings_intent);
+        }
+        else if(item.getItemId() == R.id.main_logout_btn){
 
             FirebaseAuth.getInstance().signOut();
             sendToStart();
+        }
+        else if(item.getItemId() == R.id.main_all_btn){
+
+            Intent users_intent = new Intent(MainActivity.this, UsersActivity.class);
+            startActivity(users_intent);
         }
 
 
