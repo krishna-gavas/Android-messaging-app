@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/user_single_online"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -34,5 +36,16 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:text="user_display_status" />
+
+    <ImageView
+        android:id="@+id/user_single_online_icon"
+        android:layout_width="38dp"
+        android:layout_height="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="150dp"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/greendot" />
 
 </RelativeLayout>

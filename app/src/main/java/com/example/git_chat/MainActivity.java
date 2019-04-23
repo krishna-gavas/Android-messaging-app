@@ -10,14 +10,18 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-public class MainActivity extends AppCompatActivity implements RequestsFragment.OnFragmentInteractionListener,
+public class MainActivity extends AppCompatActivity
+        implements RequestsFragment.OnFragmentInteractionListener,
                                                             ChatsFragment.OnFragmentInteractionListerner,
-                                                            FriendsFragment.OnFragmentInteractionListener {
+                                                            FriendsFragment.OnFragmentInteractionListener
+    {
 
     @Override
     public void onFragmentInteraction(Uri uri) {
@@ -27,8 +31,12 @@ public class MainActivity extends AppCompatActivity implements RequestsFragment.
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;
 
+    private FirebaseUser mCurrentUser;
+
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    private DatabaseReference mUserRef;
 
     private TabLayout mTabLayout;
 
@@ -45,6 +53,12 @@ public class MainActivity extends AppCompatActivity implements RequestsFragment.
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("GIT-Chat");
 
+        mCurrentUser = mAuth.getCurrentUser();
+
+        String current_uid = mCurrentUser.getUid();
+
+        mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
+
         //Tabs
         mViewPager = findViewById(R.id.main_tab_pager);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -58,12 +72,27 @@ public class MainActivity extends AppCompatActivity implements RequestsFragment.
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if (currentUser == null){
+        if (mCurrentUser == null){
 
             sendToStart();
         }
+        else {
+
+            mUserRef.child("online").setValue(true);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+
+        if(mCurrentUser != null){
+
+            mUserRef.child("online").setValue(false);
+        }
+
     }
 
     private void sendToStart(){

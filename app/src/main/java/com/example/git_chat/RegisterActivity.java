@@ -100,11 +100,15 @@ public class RegisterActivity extends AppCompatActivity {
                                     current_user = mAuth.getCurrentUser();
                                     String uid = current_user.getUid();
 
+                                    String device_token = FirebaseInstanceId.getInstance().getToken();
+
                                     HashMap<String,String> userMap = new HashMap<>();
                                     userMap.put("name",display_name);
                                     userMap.put("status","Hi there I'm using GIT-Chat");
                                     userMap.put("image","default");
                                     userMap.put("thumb_image","default");
+                                    userMap.put("device_token",device_token);
+                                    userMap.put("online","true");
 
                                     userRef.child(uid).setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
@@ -120,7 +124,6 @@ public class RegisterActivity extends AppCompatActivity {
                                             mUserDatabase.child(current_user_id).child("device_token").setValue(deviceToken).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
-
                                                     Intent mainIntent = new Intent(RegisterActivity.this,MainActivity.class);
                                                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                     startActivity(mainIntent);

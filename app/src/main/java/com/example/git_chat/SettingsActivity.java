@@ -155,6 +155,39 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser == null){
+
+            sendToStart();
+        }
+        else {
+
+            mUserDatabase.child("online").setValue(true);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if(currentUser != null){
+
+            mUserDatabase.child("online").setValue(false);
+        }
+
+    }
+
+    private void sendToStart(){
+        Intent startIntent = new Intent(SettingsActivity.this,StartActivity.class);
+        startActivity(startIntent);
+        finish();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
