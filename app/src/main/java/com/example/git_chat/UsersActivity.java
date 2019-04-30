@@ -11,8 +11,11 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
@@ -24,7 +27,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UsersActivity extends AppCompatActivity {
 
+    private FirebaseAuth mAuth;
+
     private Toolbar mToolbar;
+
+    private FirebaseUser mCurrentUser;
+
+    private DatabaseReference mUserRef;
 
     private RecyclerView mUsersList;
 
@@ -34,6 +43,14 @@ public class UsersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        mCurrentUser = mAuth.getCurrentUser();
+
+        String current_uid = mCurrentUser.getUid();
+
+        mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
 
         mToolbar = findViewById(R.id.users_appBar);
         setSupportActionBar(mToolbar);
@@ -52,6 +69,15 @@ public class UsersActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        if (mCurrentUser == null){
+
+            sendToStart();
+        }
+        else {
+
+            mUserRef.child("online").setValue("true");
+        }
 
         FirebaseRecyclerOptions<Users> options=
                 new FirebaseRecyclerOptions.Builder<Users>()
@@ -95,8 +121,24 @@ public class UsersActivity extends AppCompatActivity {
         mUsersList.setAdapter(firebaseRecyclerAdapter);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
 
 
+        if(mCurrentUser != null){
+
+            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
+        }
+
+    }
+
+
+    private void sendToStart(){
+        Intent startIntent = new Intent(UsersActivity.this,StartActivity.class);
+        startActivity(startIntent);
+        finish();
+    }
 
 
 

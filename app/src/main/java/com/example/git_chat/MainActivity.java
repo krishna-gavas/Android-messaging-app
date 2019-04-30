@@ -1,7 +1,6 @@
 package com.example.git_chat;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,10 +23,12 @@ public class MainActivity extends AppCompatActivity
                                                             FriendsFragment.OnFragmentInteractionListener
     {
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        //you can leave it empty
+        @Override
+    public void onFragmentInteraction() {
+        onFragmentInteraction();
     }
+
+
 
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;
@@ -57,7 +59,11 @@ public class MainActivity extends AppCompatActivity
 
         String current_uid = mCurrentUser.getUid();
 
-        mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
+        if(mAuth.getCurrentUser() != null){
+
+            mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
+
+        }
 
         //Tabs
         mViewPager = findViewById(R.id.main_tab_pager);
@@ -79,7 +85,7 @@ public class MainActivity extends AppCompatActivity
         }
         else {
 
-            mUserRef.child("online").setValue(true);
+            mUserRef.child("online").setValue("true");
         }
     }
 
@@ -90,7 +96,7 @@ public class MainActivity extends AppCompatActivity
 
         if(mCurrentUser != null){
 
-            mUserRef.child("online").setValue(false);
+            mUserRef.child("online").setValue(ServerValue.TIMESTAMP);
         }
 
     }

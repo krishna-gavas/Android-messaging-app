@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -157,26 +158,26 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if (currentUser == null){
+        if (mCurrentUser == null){
 
             sendToStart();
         }
         else {
 
-            mUserDatabase.child("online").setValue(true);
+            mUserDatabase.child("online").setValue("true");
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if(currentUser != null){
+        if(mCurrentUser != null){
 
-            mUserDatabase.child("online").setValue(false);
+            mUserDatabase.child("online").setValue(ServerValue.TIMESTAMP);
         }
 
     }

@@ -6,18 +6,16 @@ public class Users  {
     public String image;
     public String status;
     public String thumb_image;
-    public Boolean online;
 
     public Users() {
     }
 
 
-    public Users(String name, String image, String status, String thumb_image, Boolean online) {
+    public Users(String name, String image, String status, String thumb_image) {
         this.name = name;
         this.image = image;
         this.status = status;
         this.thumb_image = thumb_image;
-        this.online = online;
     }
 
     public void setName(String name) {
@@ -52,11 +50,5 @@ public class Users  {
         return thumb_image;
     }
 
-    public Boolean getOnline() {
-        return online;
-    }
 
-    public void setOnline(Boolean online) {
-        this.online = online;
-    }
 }
